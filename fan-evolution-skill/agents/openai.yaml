@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fan Evolution Skill"
+  short_description: "Upgrade Codex into a companion"
+  default_prompt: "Use $fan-evolution-skill to turn a basic Codex assistant into a proactive, emotionally present local companion with reviewable memory and safety boundaries."
