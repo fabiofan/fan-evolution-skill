@@ -1,4 +1,0 @@
-interface:
-  display_name: "Companion Evolution"
-  short_description: "Upgrade Codex into a companion"
-  default_prompt: "Use $companion-evolution to turn a basic Codex assistant into a proactive, emotionally present local companion with reviewable memory and safety boundaries."
