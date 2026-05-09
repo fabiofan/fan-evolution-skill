@@ -20,6 +20,9 @@ browser data, or relationship history.
 - Action feedback after reminders
 - A relationship timeline for long-term continuity
 - A self-evolution loop that stays reviewable
+- **LLM-enhanced signal extraction, reflection, and relationship analysis (v3.0.0)**
+- **Three-layer memory tiering: core / active / fading**
+- **193 unit tests, zero external dependencies**
 
 ## Install From GitHub
 
@@ -77,6 +80,16 @@ folder should live, what directories it may sense, and what privacy boundaries
 must never be crossed.
 ```
 
+## Quick Start (v3.0.0)
+
+```bash
+cd fan-evolution-skill
+python3 tools/companion.py init          # Interactive setup
+python3 tools/companion.py doctor        # Health check
+python3 tools/companion.py run           # Full daily loop
+python3 tools/companion.py understand --text "I decided to learn Rust today."
+```
+
 ## Privacy Rule
 
 Port the skeleton, not the private lived context.
@@ -106,5 +119,15 @@ Do not copy another person's:
 fan-evolution-skill/
   SKILL.md
   agents/openai.yaml
+  bin/companion
+  docs/LLM_SETUP.md
   references/UPGRADE_PATH.md
+  templates/companion_config.json
+  tests/
+  tools/
+    companion.py
+    llm.py
+    utils.py
+    commands/
+    hooks/
 ```
