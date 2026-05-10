@@ -1,187 +1,159 @@
 # Fan Evolution Skill
 
-Turn a basic Codex assistant into a durable local companion with emotional
-presence, proactive loops, reviewable memory, reminders, action feedback,
-relationship timeline, and privacy boundaries.
+> v3.0.0 — LLM Dual-Engine Architecture
 
-This is a shareable skill blueprint. It ports the architecture of Kitty's
-companion system, not anyone's private memories, diaries, projects, accounts,
-browser data, or relationship history.
+Turn a basic Codex assistant into a durable local companion with persistent memory, emotional presence, proactive relationship loops, LLM-enhanced understanding, and privacy boundaries.
 
-## What It Helps Build
+**Zero external dependencies.** Pure Python 3 standard library. 193 unit tests. 25 CLI commands.
 
-- A named companion with its own identity root
-- A presence protocol for warmth, directness, comfort, fatigue, and frustration
-- A watchlist for future concern and proactive follow-up
-- A safe environment sensing boundary
-- Reminder levels: `must`, `gentle`, and `inbox`
-- Scene archives for context recovery
-- Memory candidates, curation, confirmed writeback, and rollback
-- Action feedback after reminders
-- A relationship timeline for long-term continuity
-- A self-evolution loop that stays reviewable
+---
+
+## What It Does
+
+| Capability | Description |
+|-----------|-------------|
+| 🧠 **Persistent Memory** | Three-layer tiering (core / active / fading). Important things never decay. |
+| 🤖 **LLM-Enhanced Understanding** | Optional AI-powered signal extraction, reflection, and relationship analysis. Falls back to regex when offline. |
+| 💬 **Deep Conversation Analysis** | `understand` command reads a conversation and outputs emotional trajectory, implicit needs, and relationship dynamics. |
+| ⏰ **Proactive Loops** | Auto-scheduled (macOS launchd / Linux cron). Companion runs in the background every 2 hours. |
+| 🔒 **Privacy First** | 11 protected patterns. All data stays on your local disk. Fully auditable, rollback-able. |
+| 📊 **Relationship Timeline** | Tracks trust signals, milestones, gratitude, and repair moments across conversations. |
+| 📦 **Export & Migrate** | Full + incremental backup. Your memory is portable — switch LLM providers without losing anything. |
+
+---
 
 ## Quick Start
 
-After installing, initialize and run:
-
 ```bash
-cd fan-evolution-skill
+git clone https://github.com/fabiofan/fan-evolution-skill.git
+cd fan-evolution-skill/fan-evolution-skill
 
-# Initialize a new companion workspace
-python3 tools/companion.py init --name kitty --non-interactive
-
-# Health check
-python3 tools/companion.py doctor
-
-# Run the full loop
-python3 tools/companion.py run --hours 24 --limit 120
-
-# Check status
-python3 tools/companion.py status
-
-# Generate dashboard
-python3 tools/companion.py dashboard
+python3 tools/companion.py init          # Interactive setup
+python3 tools/companion.py doctor        # Health check
+python3 tools/companion.py run           # Full daily loop
+python3 tools/companion.py status        # See what's happening
 ```
 
-Or use the shell shortcut:
+### Enable LLM (optional but recommended)
 
 ```bash
-./bin/companion init --name kitty --non-interactive
-./bin/companion doctor
-./bin/companion run --hours 24 --limit 120
+export OPENAI_API_KEY=sk-...
 ```
 
-## Features
+Supports any OpenAI-compatible API: GPT-4o, Claude (via proxy), DeepSeek, Groq, Ollama (local). See [docs/LLM_SETUP.md](fan-evolution-skill/docs/LLM_SETUP.md) for all providers.
+
+Without an API key, everything still works — just uses regex-based analysis instead of AI.
+
+---
+
+## Install as Codex Skill
+
+```bash
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo fabiofan/fan-evolution-skill \
+  --path fan-evolution-skill
+```
+
+Or from URL:
+
+```bash
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --url https://github.com/fabiofan/fan-evolution-skill/tree/main/fan-evolution-skill
+```
+
+Restart Codex after installing. Then invoke with `$fan-evolution-skill`.
+
+---
+
+## All Commands (25)
 
 | Command | Description |
 |---------|-------------|
-| `init` | Initialize a new companion workspace with identity files |
+| `init` | Initialize companion workspace with identity files |
 | `sense` | Scan authorized directories for recent changes |
 | `watchlist` | Manage future concerns, sync due items to reminders |
 | `reminders` | Manage reminder list (must/gentle/inbox tiers) |
 | `archive` | Package current session as a recoverable archive |
-| `digest` | Extract memory candidates from recent archives |
-| `curate` | Select top candidates for writeback proposal |
-| `memory-apply` | Apply confirmed proposals to MEMORY.md |
+| `digest` | Extract memory candidates (LLM + regex dual engine) |
+| `curate` | Score and rank candidates for writeback |
+| `memory-apply` | Write confirmed proposals to MEMORY.md |
 | `memory-rollback` | Rollback a memory entry by ID |
+| `memory-decay` | Run tier promotion/demotion cycle |
+| `memory-recall` | Retrieve from cold storage by ID or keyword |
 | `feedback` | Check reminder execution status |
 | `timeline` | Generate relationship timeline entries |
-| `reflect` | Generate daily reflection and evolution suggestions |
-| `run` | Execute full companion loop (all of the above) |
-| `doctor` | Validate config and file integrity |
+| `check-in` | Analyze relationship health, suggest actions (LLM-powered) |
+| `reflect` | Generate daily reflection (LLM-powered) |
+| `understand` | Deep conversation analysis: emotions, needs, dynamics |
+| `ingest` | Import conversation text for processing |
+| `schedule` | Install/manage auto-scheduling (launchd/cron) |
+| `presence` | Manage behavioral rules in PRESENCE.md |
+| `export` | Full or incremental backup (JSON) |
+| `run` | Execute full companion loop |
+| `doctor` | Validate config, files, and LLM connectivity |
 | `status` | Output companion status summary |
-| `dashboard` | Generate HTML dashboard |
+| `dashboard` | Generate HTML dashboard with progress visualization |
+| `init` | Interactive workspace initialization |
 
-## Install From GitHub
+---
 
-After this repository is published, install with:
+## Memory Architecture
 
-```bash
-python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo YOUR_GITHUB_USERNAME/fan-evolution-skill \
-  --path fan-evolution-skill
+```
+┌─────────────────────────────────────────────────┐
+│                Memory Tiering                     │
+├─────────────────────────────────────────────────┤
+│  CORE     — Never decays. Decisions, milestones, │
+│             strong emotions, referenced ≥3 times │
+│                                                  │
+│  ACTIVE   — Default tier. Referenced = reset     │
+│             timer. ≥3 references → promote core  │
+│                                                  │
+│  FADING   — Low-score context. After decay_days  │
+│             without reference → cold storage     │
+│             (still recallable, never deleted)     │
+└─────────────────────────────────────────────────┘
 ```
 
-Or install from a GitHub URL:
-
-```bash
-python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --url https://github.com/YOUR_GITHUB_USERNAME/fan-evolution-skill/tree/main/fan-evolution-skill
-```
-
-Restart Codex after installing.
-
-## Manual Install
-
-Copy the skill folder into your Codex skills directory:
-
-```bash
-mkdir -p ~/.codex/skills
-cp -R fan-evolution-skill ~/.codex/skills/
-```
-
-Restart Codex after copying.
-
-## Verify Installation
-
-```bash
-cd fan-evolution-skill
-python3 -m py_compile tools/companion.py
-python3 tools/companion.py --help
-python3 tools/companion.py doctor
-```
-
-## Use
-
-Invoke the skill in Codex:
-
-```text
-$fan-evolution-skill
-```
-
-Example prompt:
-
-```text
-Use $fan-evolution-skill to turn my basic Codex assistant into a long-term
-local companion. Ask me what the companion should be called, where its root
-folder should live, what directories it may sense, and what privacy boundaries
-must never be crossed.
-```
+---
 
 ## Privacy Rule
 
-Port the skeleton, not the private lived context.
+This skill ports the **architecture**, not private data.
 
-Reusable:
+✅ Reusable: folder structure, command chain, review gates, safety boundaries, memory governance patterns
 
-- folder architecture
-- command chain
-- review gates
-- safety boundaries
-- reminder priority model
-- archive and memory governance pattern
-- relationship timeline idea
+❌ Never copy: private diaries, project details, emotional memories, relationship phrases, account/login/payment data, user-specific preferences
 
-Do not copy another person's:
+---
 
-- private diaries
-- project details
-- emotional memories
-- relationship phrases
-- account, login, payment, browser profile, or private communication data
-- user-specific preferences that could reveal identity or private context
+## File Structure
 
-## Files
-
-```text
-fan-evolution-skill/
-  SKILL.md
-  agents/openai.yaml
-  references/UPGRADE_PATH.md
-  templates/
-    companion_config.json
-  tools/
-    companion.py
-    utils.py
-    commands/
-      __init__.py
-      sense.py
-      watchlist.py
-      reminders.py
-      archive.py
-      digest.py
-      curate.py
-      memory_apply.py
-      memory_rollback.py
-      feedback.py
-      timeline.py
-      reflect.py
-      run.py
-      doctor.py
-      status.py
-      dashboard.py
-      init.py
-  bin/
-    companion
 ```
+fan-evolution-skill/
+├── SKILL.md
+├── agents/openai.yaml
+├── bin/companion
+├── docs/LLM_SETUP.md
+├── references/UPGRADE_PATH.md
+├── templates/companion_config.json
+├── tests/                          (193 tests)
+│   ├── test_basic.py
+│   ├── test_v2_features.py
+│   ├── test_v21_features.py
+│   ├── test_v22_features.py
+│   ├── test_v23_features.py
+│   └── test_v3_llm.py
+└── tools/
+    ├── companion.py                (main CLI entry point)
+    ├── llm.py                      (LLM integration layer)
+    ├── utils.py                    (shared utilities)
+    ├── commands/                   (25 command modules)
+    └── hooks/post_conversation.py
+```
+
+---
+
+## License
+
+MIT
