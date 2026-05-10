@@ -22,6 +22,75 @@ Turn a basic Codex assistant into a durable local companion with persistent memo
 
 ---
 
+## Demo
+
+### `companion doctor` — Health Check
+```
+[doctor] Checking companion workspace...
+
+  ✓ companion_config.json — valid JSON
+  ✓ SOUL.md (662B)
+  ✓ PRESENCE.md (589B)
+  ✓ MEMORY.md (103B)
+  ✓ WATCHLIST.md (245B)
+  ✓ AUTOMATION/
+  ✓ tools/companion.py compiles
+  ✓ AUTOMATION/reminders.json (0 entries)
+  ℹ LLM not configured (optional)
+
+────────────────────────────────────────
+  Results: 15 OK, 0 warnings, 0 issues
+────────────────────────────────────────
+  🎉 Companion workspace is healthy!
+```
+
+### `companion status` — At a Glance
+```
+┌──────────────────────────────────────────────────┐
+│  Kitty — Status Report (v3.0.0)
+│  2026-05-10 14:42:45
+├──────────────────────────────────────────────────┤
+│
+│  📋 Reminders:  3 total (1 waiting, 2 done)
+│  🧠 Memory:     12 blocks (4 core, 6 active, 2 fading)
+│  📦 Archives:   7 packages
+│  👁  Watchlist:  2 items
+│
+│  Last Sense:     2 hours ago
+│  Last Reflect:   2 hours ago
+│  Last Feedback:  2 hours ago
+│
+│  🤖 LLM: enabled (gpt-4o-mini via api.openai.com)
+│
+└──────────────────────────────────────────────────┘
+```
+
+### `companion run` — Full Loop
+```
+============================================================
+  COMPANION LOOP — 24h window, limit 120
+  LLM: enabled (gpt-4o-mini)
+============================================================
+
+  ✓ sense         — 12 modified files, 3 git commits
+  ✓ watchlist     — 1 due now → synced to reminders
+  ✓ archive       — arc-20260510-a23ed5
+  ✓ digest        — 4 candidates extracted [LLM-powered]
+  ✓ curate        — top 2 scored for writeback
+  ✓ memory-apply  — 2 blocks auto-confirmed (score ≥ 7)
+  ✓ feedback      — 1 reminder done, 1 waiting
+  ✓ timeline      — 2 relationship events detected
+  ✓ check-in      — interaction healthy, no action needed
+  ✓ reflect       — daily reflection generated [AI-generated]
+  ✓ memory-decay  — 1 block fading → cold storage
+
+============================================================
+  LOOP COMPLETE — 12 steps, 0 errors
+============================================================
+```
+
+---
+
 ## Quick Start
 
 ```bash
