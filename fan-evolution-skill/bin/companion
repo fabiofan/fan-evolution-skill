@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Companion Evolution Engine — CLI entry point
+#
+# Usage:
+#   ./bin/companion <command> [options]
+#
+# Examples:
+#   ./bin/companion init --name kitty
+#   ./bin/companion sense --hours 2
+#   ./bin/companion run --hours 24 --limit 120
+#   ./bin/companion status
+#   ./bin/companion doctor
+
+set -euo pipefail
+
+# Resolve the directory where this script lives
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Path to the main Python engine
+ENGINE="${PROJECT_DIR}/tools/companion.py"
+
+if [ ! -f "$ENGINE" ]; then
+    echo "[ERROR] Engine not found: $ENGINE" >&2
+    exit 1
+fi
+
+# Execute with Python 3
+exec python3 "$ENGINE" "$@"

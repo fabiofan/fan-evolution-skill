@@ -21,6 +21,58 @@ browser data, or relationship history.
 - A relationship timeline for long-term continuity
 - A self-evolution loop that stays reviewable
 
+## Quick Start
+
+After installing, initialize and run:
+
+```bash
+cd fan-evolution-skill
+
+# Initialize a new companion workspace
+python3 tools/companion.py init --name kitty --non-interactive
+
+# Health check
+python3 tools/companion.py doctor
+
+# Run the full loop
+python3 tools/companion.py run --hours 24 --limit 120
+
+# Check status
+python3 tools/companion.py status
+
+# Generate dashboard
+python3 tools/companion.py dashboard
+```
+
+Or use the shell shortcut:
+
+```bash
+./bin/companion init --name kitty --non-interactive
+./bin/companion doctor
+./bin/companion run --hours 24 --limit 120
+```
+
+## Features
+
+| Command | Description |
+|---------|-------------|
+| `init` | Initialize a new companion workspace with identity files |
+| `sense` | Scan authorized directories for recent changes |
+| `watchlist` | Manage future concerns, sync due items to reminders |
+| `reminders` | Manage reminder list (must/gentle/inbox tiers) |
+| `archive` | Package current session as a recoverable archive |
+| `digest` | Extract memory candidates from recent archives |
+| `curate` | Select top candidates for writeback proposal |
+| `memory-apply` | Apply confirmed proposals to MEMORY.md |
+| `memory-rollback` | Rollback a memory entry by ID |
+| `feedback` | Check reminder execution status |
+| `timeline` | Generate relationship timeline entries |
+| `reflect` | Generate daily reflection and evolution suggestions |
+| `run` | Execute full companion loop (all of the above) |
+| `doctor` | Validate config and file integrity |
+| `status` | Output companion status summary |
+| `dashboard` | Generate HTML dashboard |
+
 ## Install From GitHub
 
 After this repository is published, install with:
@@ -50,6 +102,15 @@ cp -R fan-evolution-skill ~/.codex/skills/
 ```
 
 Restart Codex after copying.
+
+## Verify Installation
+
+```bash
+cd fan-evolution-skill
+python3 -m py_compile tools/companion.py
+python3 tools/companion.py --help
+python3 tools/companion.py doctor
+```
 
 ## Use
 
@@ -98,4 +159,29 @@ fan-evolution-skill/
   SKILL.md
   agents/openai.yaml
   references/UPGRADE_PATH.md
+  templates/
+    companion_config.json
+  tools/
+    companion.py
+    utils.py
+    commands/
+      __init__.py
+      sense.py
+      watchlist.py
+      reminders.py
+      archive.py
+      digest.py
+      curate.py
+      memory_apply.py
+      memory_rollback.py
+      feedback.py
+      timeline.py
+      reflect.py
+      run.py
+      doctor.py
+      status.py
+      dashboard.py
+      init.py
+  bin/
+    companion
 ```
