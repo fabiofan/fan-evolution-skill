@@ -23,11 +23,11 @@ browser data, or relationship history.
 
 ## Install From GitHub
 
-After this repository is published, install with:
+Install with:
 
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo YOUR_GITHUB_USERNAME/fan-evolution-skill \
+  --repo fabiofan/fan-evolution-skill \
   --path fan-evolution-skill
 ```
 
@@ -35,7 +35,16 @@ Or install from a GitHub URL:
 
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --url https://github.com/YOUR_GITHUB_USERNAME/fan-evolution-skill/tree/main/fan-evolution-skill
+  --url https://github.com/fabiofan/fan-evolution-skill/tree/main/fan-evolution-skill
+```
+
+If Python reports a local SSL certificate error, use git mode:
+
+```bash
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo fabiofan/fan-evolution-skill \
+  --path fan-evolution-skill \
+  --method git
 ```
 
 Restart Codex after installing.
